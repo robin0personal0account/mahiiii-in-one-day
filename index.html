@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahi's Magical World</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffe6f0, #e6eaff, #f0e6ff);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+      color: #4b0082;
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png'), linear-gradient(135deg, rgba(255, 230, 240, 0.8), rgba(230, 234, 255, 0.8));
+      z-index: -1;
+      transform: translateY(0);
+      transition: transform 0.5s ease;
+    }
+    .sparkle, .firefly {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      animation: sparkle 3s infinite ease-in-out;
+      pointer-events: none;
+    }
+    .firefly {
+      background: rgba(255, 255, 224, 0.7);
+      animation: firefly 4s infinite ease-in-out;
+    }
+    .floating-heart, .floating-star, .sakura-petal {
+      position: absolute;
+      pointer-events: none;
+      animation: float 10s infinite ease-in-out;
+    }
+    .floating-heart {
+      width: 20px;
+      height: 20px;
+      background: url('https://img.icons8.com/emoji/20/heart-suit.png') no-repeat center;
+      background-size: contain;
+    }
+    .floating-star {
+      width: 15px;
+      height: 15px;
+      background: url('https://img.icons8.com/emoji/15/star-emoji.png') no-repeat center;
+      background-size: contain;
+    }
+    .sakura-petal {
+      width: 12px;
+      height: 12px;
+      background: url('https://img.icons8.com/emoji/12/cherry-blossom.png') no-repeat center;
+      background-size: contain;
+      animation: fall 12s infinite linear;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: url('https://img.icons8.com/emoji/20/heart-suit.png') no-repeat center;
+      background-size: contain;
+      pointer-events: none;
+      animation: fadeOut 1s ease-out forwards;
+    }
+    @keyframes sparkle {
+      0%, 100% { transform: scale(0.5); opacity: 0.3; }
+      50% { transform: scale(1); opacity: 0.9; }
+    }
+    @keyframes firefly {
+      0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+      50% { transform: translate(10px, -10px); opacity: 0.7; }
+    }
+    @keyframes float {
+      0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
+      50% { transform: translate(50px, 50px) rotate(180deg); opacity: 0.5; }
+      100% { transform: translate(0, 100px) rotate(360deg); opacity: 0; }
+    }
+    @keyframes fall {
+      0% { transform: translate(0, -50px) rotate(0deg); opacity: 0.8; }
+      100% { transform: translate(20px, 100vh) rotate(720deg); opacity: 0; }
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.5); }
+    }
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+      transform-style: preserve-3d;
+    }
+    .card:hover {
+      transform: scale(1.05) translateY(-10px) rotate(2deg);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      filter: brightness(1.1) drop-shadow(0 0 10px rgba(255, 182, 193, 0.5));
+    }
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      transition-delay: calc(0.1s * var(--index));
+    }
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff99cc;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #back-to-top:hover {
+      transform: scale(1.1);
+    }
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      .card img {
+        height: 40vw;
+      }
+    }
+  </style>
+</head>
+<body class="relative">
+  <!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center text-center px-4 relative">
+    <div class="hero-bg"></div>
+    <div class="scroll-reveal">
+      <h1 class="text-4xl md:text-6xl font-semibold text-pink-600 drop-shadow-lg animate-pulse">
+        Just Mahi
+      </h1>
+    </div>
+  </section>
+
+  <!-- Image Cards Grid -->
+  <section class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 1;">
+        <img src="https://i.pinimg.com/736x/ea/18/2e/ea182e415eb95f838087c7c41bca4ba4.jpg" alt="Mahi Image 1" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 2;">
+        <img src="https://i.pinimg.com/736x/f1/a0/e5/f1a0e5b26b86e8f9e4fb55d0cc74505e.jpg" alt="Mahi Image 2" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 3;">
+        <img src="https://i.pinimg.com/736x/d8/be/fc/d8befc63040cca1c1a51511f9cc4805c.jpg" alt="Mahi Image 3" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 4;">
+        <img src="https://i.pinimg.com/736x/e9/ef/ee/e9efeeded71a072f34b16d7e1c7848d0.jpg" alt="Mahi Image 4" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 5;">
+        <img src="https://i.pinimg.com/736x/4a/79/d2/4a79d2a778f2ad9ea54d67ba8831605f.jpg" alt="Mahi Image 5" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 6;">
+        <img src="https://i.pinimg.com/736x/a7/60/63/a76063958590c7ca23a615d913043dc5.jpg" alt="Mahi Image 6" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 7;">
+        <img src="https://i.pinimg.com/736x/82/3b/b1/823bb1913d7cc2364b67baea9c0cc9c0.jpg" alt="Mahi Image 7" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 8;">
+        <img src="https://i.pinimg.com/736x/dc/64/53/dc6453f667ca111cca6261439508ac74.jpg" alt="Mahi Image 8" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 9;">
+        <img src="https://i.pinimg.com/736x/d3/99/cc/d399cc518d562b40196c21e04c18519a.jpg" alt="Mahi Image 9" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 10;">
+        <img src="https://i.pinimg.com/736x/d9/6f/79/d96f792e080630c9ac87ba33d6926662.jpg" alt="Mahi Image 10" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 11;">
+        <img src="https://i.pinimg.com/736x/5e/70/b6/5e70b6f7c3416d621c54a304b3f419dd.jpg" alt="Mahi Image 11" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 12;">
+        <img src="https://i.pinimg.com/736x/38/67/04/386704f7775d72f45eec418717facef1.jpg" alt="Mahi Image 12" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 13;">
+        <img src="https://i.pinimg.com/736x/36/67/64/366764fdcea094ccae4ef35519d9051d.jpg" alt="Mahi Image 13" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 14;">
+        <img src="https://i.pinimg.com/736x/20/e8/60/20e860c820691a4e426e55e0c4c09940.jpg" alt="Mahi Image 14" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+
+  <!-- Back to Top Button -->
+  <div id="back-to-top" title="Back to Top">↑</div>
+
+  <!-- JavaScript for Animations -->
+  <script>
+    // Sparkle and Firefly Background
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add(Math.random() > 0.5 ? 'sparkle' : 'firefly');
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.top = Math.random() * window.innerHeight + 'px';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 3000);
+    }
+    setInterval(createSparkle, 150);
+
+    // Floating Elements
+    function createFloatingElement(type) {
+      const el = document.createElement('div');
+      el.classList.add(type);
+      el.style.left = Math.random() * window.innerWidth + 'px';
+      el.style.top = Math.random() * -100 + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 12000);
+    }
+    setInterval(() => {
+      createFloatingElement('floating-heart');
+      createFloatingElement('floating-star');
+      createFloatingElement('sakura-petal');
+    }, 2000);
+
+    // Heart Animation on Cursor/Tap
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() < 0.1) createHeart(e.clientX, e.clientY);
+    });
+
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createHeart(touch.clientX, touch.clientY);
+    });
+
+    // Scroll Reveal Animation
+    const scrollReveals = document.querySelectorAll('.scroll-reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    scrollReveals.forEach(el => observer.observe(el));
+
+    // Parallax Effect for Hero Background
+    window.addEventListener('scroll', () => {
+      const heroBg = document.querySelector('.hero-bg');
+      const scrollPosition = window.scrollY;
+      heroBg.style.transform = `translateY(${scrollPosition * 0.3}px)`;
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.style.display = 'block';
+        backToTop.style.opacity = '1';
+      } else {
+        backToTop.style.opacity = '0';
+        setTimeout(() => backToTop.style.display = 'none', 300);
+      }
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
