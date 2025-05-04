@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore Mahi's Magical World with enchanting visuals and animations.">
+  <meta name="keywords" content="Mahi, magical world, animations, gallery">
   <title>Mahi's Magical World</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #ffe6f0, #e6eaff, #f0e6ff);
       overflow-x: hidden;
       position: relative;
@@ -23,8 +27,6 @@
       height: 100vh;
       background: url('https://www.transparenttextures.com/patterns/stardust.png'), linear-gradient(135deg, rgba(255, 230, 240, 0.8), rgba(230, 234, 255, 0.8));
       z-index: -1;
-      transform: translateY(0);
-      transition: transform 0.5s ease;
     }
     .sparkle, .firefly {
       position: absolute;
@@ -32,17 +34,14 @@
       height: 8px;
       background: rgba(255, 255, 255, 0.9);
       border-radius: 50%;
-      animation: sparkle 3s infinite ease-in-out;
       pointer-events: none;
     }
     .firefly {
       background: rgba(255, 255, 224, 0.7);
-      animation: firefly 4s infinite ease-in-out;
     }
     .floating-heart, .floating-star, .sakura-petal {
       position: absolute;
       pointer-events: none;
-      animation: float 10s infinite ease-in-out;
     }
     .floating-heart {
       width: 20px;
@@ -61,7 +60,6 @@
       height: 12px;
       background: url('https://img.icons8.com/emoji/12/cherry-blossom.png') no-repeat center;
       background-size: contain;
-      animation: fall 12s infinite linear;
     }
     .heart {
       position: absolute;
@@ -70,47 +68,18 @@
       background: url('https://img.icons8.com/emoji/20/heart-suit.png') no-repeat center;
       background-size: contain;
       pointer-events: none;
-      animation: fadeOut 1s ease-out forwards;
-    }
-    @keyframes sparkle {
-      0%, 100% { transform: scale(0.5); opacity: 0.3; }
-      50% { transform: scale(1); opacity: 0.9; }
-    }
-    @keyframes firefly {
-      0%, 100% { transform: translate(0, 0); opacity: 0.2; }
-      50% { transform: translate(10px, -10px); opacity: 0.7; }
-    }
-    @keyframes float {
-      0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
-      50% { transform: translate(50px, 50px) rotate(180deg); opacity: 0.5; }
-      100% { transform: translate(0, 100px) rotate(360deg); opacity: 0; }
-    }
-    @keyframes fall {
-      0% { transform: translate(0, -50px) rotate(0deg); opacity: 0.8; }
-      100% { transform: translate(20px, 100vh) rotate(720deg); opacity: 0; }
-    }
-    @keyframes fadeOut {
-      0% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.5); }
     }
     .card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+      will-change: transform, box-shadow;
+      transition: box-shadow 0.3s ease;
       transform-style: preserve-3d;
+      border-image: linear-gradient(45deg, #ff99cc, #99ccff) 1;
     }
     .card:hover {
-      transform: scale(1.05) translateY(-10px) rotate(2deg);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-      filter: brightness(1.1) drop-shadow(0 0 10px rgba(255, 182, 193, 0.5));
     }
-    .scroll-reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-      transition-delay: calc(0.1s * var(--index));
-    }
-    .scroll-reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .hero-title {
+      text-shadow: 0 0 10px rgba(255, 182, 193, 0.8);
     }
     #back-to-top {
       position: fixed;
@@ -122,150 +91,213 @@
       border-radius: 50%;
       cursor: pointer;
       display: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    #back-to-top:hover {
-      transform: scale(1.1);
     }
     @media (max-width: 640px) {
       h1 {
         font-size: 2.5rem;
       }
       .card img {
-        height: 40vw;
+        height: 52vw; /* Increased from 44vw to 52vw for taller cards on small screens */
       }
     }
   </style>
 </head>
 <body class="relative">
   <!-- Hero Section -->
-  <section class="min-h-screen flex items-center justify-center text-center px-4 relative">
+  <header class="min-h-screen flex items-center justify-center text-center px-4 relative">
     <div class="hero-bg"></div>
-    <div class="scroll-reveal">
-      <h1 class="text-4xl md:text-6xl font-semibold text-pink-600 drop-shadow-lg animate-pulse">
-        Just Mahi
-      </h1>
-    </div>
-  </section>
+    <h1 class="hero-title text-4xl md:text-6xl font-semibold text-pink-600 drop-shadow-lg">Just Mahi</h1>
+  </header>
 
   <!-- Image Cards Grid -->
-  <section class="container mx-auto px-4 py-12">
+  <main class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 1;">
-        <img src="https://i.pinimg.com/736x/ea/18/2e/ea182e415eb95f838087c7c41bca4ba4.jpg" alt="Mahi Image 1" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 1;">
+        <img src="https://i.pinimg.com/736x/ea/18/2e/ea182e415eb95f838087c7c41bca4ba4.jpg" alt="A colorful illustration of a magical character" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 2;">
-        <img src="https://i.pinimg.com/736x/f1/a0/e5/f1a0e5b26b86e8f9e4fb55d0cc74505e.jpg" alt="Mahi Image 2" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 2;">
+        <img src="https://i.pinimg.com/736x/f1/a0/e5/f1a0e5b26b86e8f9e4fb55d0cc74505e.jpg" alt="A whimsical scene with sparkling stars" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 3;">
-        <img src="https://i.pinimg.com/736x/d8/be/fc/d8befc63040cca1c1a51511f9cc4805c.jpg" alt="Mahi Image 3" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 3;">
+        <img src="https://i.pinimg.com/736x/d8/be/fc/d8befc63040cca1c1a51511f9cc4805c.jpg" alt="A dreamy pastel-colored landscape" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 4;">
-        <img src="https://i.pinimg.com/736x/e9/ef/ee/e9efeeded71a072f34b16d7e1c7848d0.jpg" alt="Mahi Image 4" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 4;">
+        <img src="https://i.pinimg.com/736x/e9/ef/ee/e9efeeded71a072f34b16d7e1c7848d0.jpg" alt="A cute character in a magical forest" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 5;">
-        <img src="https://i.pinimg.com/736x/4a/79/d2/4a79d2a778f2ad9ea54d67ba8831605f.jpg" alt="Mahi Image 5" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 5;">
+        <img src="https://i.pinimg.com/736x/4a/79/d2/4a79d2a778f2ad9ea54d67ba8831605f.jpg" alt="A vibrant illustration of a fantasy creature" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 6;">
-        <img src="https://i.pinimg.com/736x/a7/60/63/a76063958590c7ca23a615d913043dc5.jpg" alt="Mahi Image 6" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 6;">
+        <img src="https://i.pinimg.com/736x/a7/60/63/a76063958590c7ca23a615d913043dc5.jpg" alt="A sparkling magical artifact" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 7;">
-        <img src="https://i.pinimg.com/736x/82/3b/b1/823bb1913d7cc2364b67baea9c0cc9c0.jpg" alt="Mahi Image 7" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 7;">
+        <img src="https://i.pinimg.com/736x/82/3b/b1/823bb1913d7cc2364b67baea9c0cc9c0.jpg" alt="A serene scene with floating lanterns" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 8;">
-        <img src="https://i.pinimg.com/736x/dc/64/53/dc6453f667ca111cca6261439508ac74.jpg" alt="Mahi Image 8" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 8;">
+        <img src="https://i.pinimg.com/736x/dc/64/53/dc6453f667ca111cca6261439508ac74.jpg" alt="A mystical character casting a spell" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 9;">
-        <img src="https://i.pinimg.com/736x/d3/99/cc/d399cc518d562b40196c21e04c18519a.jpg" alt="Mahi Image 9" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 9;">
+        <img src="https://i.pinimg.com/736x/d3/99/cc/d399cc518d562b40196c21e04c18519a.jpg" alt="A glowing crystal in a fantasy setting" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 10;">
-        <img src="https://i.pinimg.com/736x/d9/6f/79/d96f792e080630c9ac87ba33d6926662.jpg" alt="Mahi Image 10" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 10;">
+        <img src="https://i.pinimg.com/736x/d9/6f/79/d96f792e080630c9ac87ba33d6926662.jpg" alt="A playful character with magical effects" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 11;">
-        <img src="https://i.pinimg.com/736x/5e/70/b6/5e70b6f7c3416d621c54a304b3f419dd.jpg" alt="Mahi Image 11" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 11;">
+        <img src="https://i.pinimg.com/736x/5e/70/b6/5e70b6f7c3416d621c54a304b3f419dd.jpg" alt="A starry night with magical creatures" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-purple-200" style="--index: 12;">
-        <img src="https://i.pinimg.com/736x/38/67/04/386704f7775d72f45eec418717facef1.jpg" alt="Mahi Image 12" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 12;">
+        <img src="https://i.pinimg.com/736x/38/67/04/386704f7775d72f45eec418717facef1.jpg" alt="A whimsical garden with glowing plants" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-pink-200" style="--index: 13;">
-        <img src="https://i.pinimg.com/736x/36/67/64/366764fdcea094ccae4ef35519d9051d.jpg" alt="Mahi Image 13" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 13;">
+        <img src="https://i.pinimg.com/736x/36/67/64/366764fdcea094ccae4ef35519d9051d.jpg" alt="A magical portal in a fantasy world" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
-      <div class="card scroll-reveal bg-white rounded-2xl p-4 shadow-lg border-4 border-blue-200" style="--index: 14;">
-        <img src="https://i.pinimg.com/736x/20/e8/60/20e860c820691a4e426e55e0c4c09940.jpg" alt="Mahi Image 14" class="w-full h-48 object-cover rounded-lg sm:h-40">
+      <div class="card bg-white rounded-2xl p-4 shadow-lg border-4" style="--index: 14;">
+        <img src="https://i.pinimg.com/736x/20/e8/60/20e860c820691a4e426e55e0c4c09940.jpg" alt="A character riding a magical creature" loading="lazy" class="w-full h-48 object-cover rounded-lg sm:h-52">
       </div>
     </div>
-  </section>
+  </main>
 
   <!-- Footer -->
+  <footer class="bg-pink-100 text-center py-4 text-purple-800">
+    <p>© 2025 <a href="#" class="underline hover:text-pink-600 transition-colors">Mahi's Magical World</a>. All rights reserved.</p>
+  </footer>
 
   <!-- Back to Top Button -->
-  <div id="back-to-top" title="Back to Top">↑</div>
+  <button id="back-to-top" title="Back to Top" aria-label="Scroll to top" class="fixed bottom-5 right-5 bg-pink-400 text-white p-3 rounded-full hidden transition-all focus:outline-none focus:ring-2 focus:ring-pink-600">↑</button>
 
   <!-- JavaScript for Animations -->
   <script>
-    // Sparkle and Firefly Background
-    function createSparkle() {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add(Math.random() > 0.5 ? 'sparkle' : 'firefly');
-      sparkle.style.left = Math.random() * window.innerWidth + 'px';
-      sparkle.style.top = Math.random() * window.innerHeight + 'px';
-      document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 3000);
+    // Register GSAP ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initialize Sparkles and Fireflies
+    function initializeSparkles() {
+      const maxSparkles = 20;
+      for (let i = 0; i < maxSparkles; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add(Math.random() > 0.5 ? 'sparkle' : 'firefly');
+        document.body.appendChild(sparkle);
+        gsap.set(sparkle, {
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          scale: 0.5,
+          opacity: 0.3
+        });
+        gsap.to(sparkle, {
+          scale: 1,
+          opacity: 0.9,
+          duration: 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: Math.random() * 0.5
+        });
+        gsap.to(sparkle, {
+          x: '+=10',
+          y: '-=10',
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: Math.random() * 0.5
+        });
+      }
     }
-    setInterval(createSparkle, 150);
 
     // Floating Elements
-    function createFloatingElement(type) {
-      const el = document.createElement('div');
-      el.classList.add(type);
-      el.style.left = Math.random() * window.innerWidth + 'px';
-      el.style.top = Math.random() * -100 + 'px';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 12000);
+    function initializeFloatingElements() {
+      const types = ['floating-heart', 'floating-star', 'sakura-petal'];
+      const maxElements = 15;
+      types.forEach(type => {
+        for (let i = 0; i < maxElements / 3; i++) {
+          const el = document.createElement('div');
+          el.classList.add(type);
+          document.body.appendChild(el);
+          animateFloatingElement(el);
+        }
+      });
     }
-    setInterval(() => {
-      createFloatingElement('floating-heart');
-      createFloatingElement('floating-star');
-      createFloatingElement('sakura-petal');
-    }, 2000);
+
+    function animateFloatingElement(el) {
+      const maxX = window.innerWidth - 20;
+      gsap.set(el, {
+        x: Math.min(Math.random() * window.innerWidth, maxX),
+        y: -50,
+        opacity: 0.8,
+        rotation: 0
+      });
+      gsap.to(el, {
+        y: window.innerHeight + 100,
+        x: '+=20',
+        rotation: 720,
+        opacity: 0,
+        duration: 8 + Math.random() * 4,
+        ease: 'power1.in',
+        onComplete: () => animateFloatingElement(el)
+      });
+    }
 
     // Heart Animation on Cursor/Tap
     function createHeart(x, y) {
+      if (document.querySelectorAll('.heart').length > 10) return;
       const heart = document.createElement('div');
       heart.classList.add('heart');
-      heart.style.left = x + 'px';
-      heart.style.top = y + 'px';
       document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 1000);
+      gsap.set(heart, { x, y, scale: 1, opacity: 1 });
+      gsap.to(heart, {
+        scale: 1.5,
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.out',
+        onComplete: () => heart.remove()
+      });
     }
 
-    document.addEventListener('mousemove', (e) => {
-      if (Math.random() < 0.1) createHeart(e.clientX, e.clientY);
+    // Hero Title Animation
+    gsap.from('.hero-title', {
+      scale: 0.5,
+      opacity: 0,
+      duration: 1.5,
+      ease: 'elastic.out(1, 0.5)',
+      delay: 0.5
     });
 
-    document.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
-      createHeart(touch.clientX, touch.clientY);
-    });
-
-    // Scroll Reveal Animation
-    const scrollReveals = document.querySelectorAll('.scroll-reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
+    // Card Animations
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+      // ScrollTrigger Animation
+      gsap.from(card, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        },
+        delay: index * 0.1
       });
-    }, { threshold: 0.2 });
 
-    scrollReveals.forEach(el => observer.observe(el));
-
-    // Parallax Effect for Hero Background
-    window.addEventListener('scroll', () => {
-      const heroBg = document.querySelector('.hero-bg');
-      const scrollPosition = window.scrollY;
-      heroBg.style.transform = `translateY(${scrollPosition * 0.3}px)`;
+      // Hover Animation
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+          scale: 1.05,
+          y: -10,
+          rotation: 2,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          scale: 1,
+          y: 0,
+          rotation: 0,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
     });
 
     // Back to Top Button
@@ -273,14 +305,54 @@
     window.addEventListener('scroll', () => {
       if (window.scrollY > 300) {
         backToTop.style.display = 'block';
-        backToTop.style.opacity = '1';
+        gsap.to(backToTop, { opacity: 1, scale: 1, duration: 0.5, ease: 'bounce.out' });
       } else {
-        backToTop.style.opacity = '0';
-        setTimeout(() => backToTop.style.display = 'none', 300);
+        gsap.to(backToTop, {
+          opacity: 0,
+          scale: 0,
+          duration: 0.3,
+          ease: 'power2.in',
+          onComplete: () => { backToTop.style.display = 'none'; }
+        });
       }
     });
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      gsap.to(backToTop, { scale: 1.2, duration: 0.2, ease: 'power2.out', yoyo: true, repeat: 1 });
+    });
+    backToTop.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    backToTop.addEventListener('mouseenter', () => {
+      gsap.to(backToTop, { scale: 1.1, rotation: 10, duration: 0.3, ease: 'power2.out' });
+    });
+    backToTop.addEventListener('mouseleave', () => {
+      gsap.to(backToTop, { scale: 1, rotation: 0, duration: 0.3, ease: 'power2.out' });
+    });
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.sparkle, .firefly, .floating-heart, .floating-star, .sakura-petal').forEach(el => {
+        const maxX = window.innerWidth - 20;
+        if (parseFloat(el.style.left) > maxX) el.style.left = maxX + 'px';
+      });
+    });
+
+    // Mouse and Touch Events
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() < 0.1) createHeart(e.clientX, e.clientY);
+    });
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createHeart(touch.clientX, touch.clientY);
+    });
+
+    // Initialize on Load
+    window.addEventListener('load', () => {
+      initializeSparkles();
+      initializeFloatingElements();
     });
   </script>
 </body>
